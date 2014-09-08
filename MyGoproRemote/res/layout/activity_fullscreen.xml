@@ -20,16 +20,30 @@
             android:gravity="center_vertical"
             android:orientation="vertical" >
 
-            <TextView
-                android:id="@+id/TextView02"
-                android:layout_width="196dp"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:background="#999999"
-                android:padding="6dp"
-                android:text="4H27"
-                android:textColor="#000000"
-                android:textSize="20sp" />
+                android:gravity="center" >
+
+                <ImageView
+                    android:id="@+id/imageView2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:background="#999999"
+                    android:src="@drawable/iconmode0" />
+
+                <TextView
+                    android:id="@+id/TextView02"
+                    android:layout_width="156dp"
+                    android:layout_height="wrap_content"
+                    android:background="#999999"
+                    android:padding="6dp"
+                    android:text="4H27"
+                    android:textColor="#000000"
+                    android:textSize="20sp" />
+
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/textView2"
@@ -63,7 +77,7 @@
 
                 <TextView
                     android:id="@+id/TextView01"
-                    android:layout_width="136dp"
+                    android:layout_width="100dp"
                     android:layout_height="fill_parent"
                     android:layout_gravity="center_horizontal|center"
                     android:layout_marginTop="1dp"
@@ -86,6 +100,19 @@
                     android:scaleType="fitEnd"
                     android:src="@drawable/iconepower3" />
 
+                <ImageView
+                    android:id="@+id/ImageView02"
+                    android:layout_width="36dp"
+                    android:layout_height="fill_parent"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginTop="1dp"
+                    android:adjustViewBounds="false"
+                    android:background="#999999"
+                    android:baselineAlignBottom="false"
+                    android:cropToPadding="false"
+                    android:padding="2dp"
+                    android:src="@drawable/iconwifi4" />
+
             </LinearLayout>
 
         </LinearLayout>
@@ -99,6 +126,7 @@
             android:layout_marginTop="30dp"
             android:background="#ffffff" />
 -->
+
         <LinearLayout
             android:layout_width="200dp"
             android:layout_height="match_parent"
