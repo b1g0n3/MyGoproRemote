@@ -14,10 +14,12 @@ import org.gopro.main.GoProApi;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 
 public class FullscreenActivity extends Activity {
@@ -28,6 +30,11 @@ public class FullscreenActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_fullscreen);
+		
+		 Typeface tf = Typeface.createFromAsset(getAssets(),"fonts/ladyic.ttf");
+	     TextView tv = (TextView) findViewById(R.id.chrono);
+	     tv.setTypeface(tf);
+	     tv.setTextSize(68);
 	    GoproPassword = getPassword();
 
 	    final Button button_Record = (Button) findViewById(R.id.Record);

@@ -3,7 +3,7 @@
     android:id="@+id/LinearLayout1"
     android:layout_width="428dp"
     android:layout_height="240dp"
-    android:background="@color/black_overlay"
+    android:background="@drawable/background1"
     android:gravity="center"
     android:orientation="vertical"
     tools:context="com.example.mygoproremote.FullscreenActivity" >
@@ -29,89 +29,91 @@
                     android:id="@+id/imageView2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="left"
+                    android:layout_gravity="center"
                     android:background="#999999"
-                    android:src="@drawable/iconmode0" />
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/mode1" />
 
                 <TextView
                     android:id="@+id/TextView02"
-                    android:layout_width="156dp"
-                    android:layout_height="wrap_content"
+                    android:layout_width="120dp"
+                    android:layout_height="match_parent"
                     android:background="#999999"
-                    android:padding="6dp"
-                    android:text="4H27"
+                    android:gravity="center_vertical"
+                    android:padding="4dp"
+                    android:text="W"
                     android:textColor="#000000"
-                    android:textSize="20sp" />
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
 
             </LinearLayout>
 
             <TextView
                 android:id="@+id/textView2"
-                android:layout_width="196dp"
+                android:layout_width="186dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:background="#999999"
-                android:padding="6dp"
                 android:text="1080 - 60"
                 android:textColor="#000000"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/textView1"
-                android:layout_width="196dp"
+                android:id="@+id/chrono"
+                android:layout_width="186dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:background="#999999"
-                android:padding="4dp"
-                android:text="12:34:56"
-                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="01:21:59"
                 android:textColor="#000000"
-                android:textSize="46sp"
+                android:textSize="30sp"
                 android:textStyle="bold" />
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
+                android:layout_gravity="top"
                 android:gravity="center" >
 
                 <TextView
                     android:id="@+id/TextView01"
                     android:layout_width="100dp"
-                    android:layout_height="fill_parent"
-                    android:layout_gravity="center_horizontal|center"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="top"
                     android:layout_marginTop="1dp"
                     android:background="#999999"
-                    android:padding="6dp"
                     android:text="4H27"
                     android:textColor="#000000"
-                    android:textSize="20sp" />
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
 
                 <ImageView
                     android:id="@+id/imageView1"
-                    android:layout_width="60dp"
+                    android:layout_width="50dp"
                     android:layout_height="fill_parent"
-                    android:layout_marginTop="1dp"
-                    android:adjustViewBounds="false"
-                    android:background="#999999"
-                    android:baselineAlignBottom="false"
-                    android:cropToPadding="false"
-                    android:padding="4dp"
-                    android:scaleType="fitEnd"
-                    android:src="@drawable/iconepower3" />
-
-                <ImageView
-                    android:id="@+id/ImageView02"
-                    android:layout_width="36dp"
-                    android:layout_height="fill_parent"
-                    android:layout_gravity="center_vertical"
+                    android:layout_gravity="top"
                     android:layout_marginTop="1dp"
                     android:adjustViewBounds="false"
                     android:background="#999999"
                     android:baselineAlignBottom="false"
                     android:cropToPadding="false"
                     android:padding="2dp"
-                    android:src="@drawable/iconwifi4" />
+                    android:scaleType="fitEnd"
+                    android:src="@drawable/iconepower2" />
+
+                <ImageView
+                    android:id="@+id/ImageView02"
+                    android:layout_width="36dp"
+                    android:layout_height="fill_parent"
+                    android:layout_gravity="top"
+                    android:layout_marginTop="1dp"
+                    android:adjustViewBounds="false"
+                    android:background="#999999"
+                    android:baselineAlignBottom="false"
+                    android:cropToPadding="false"
+                    android:padding="2dp"
+                    android:src="@drawable/iconwifi3" />
 
             </LinearLayout>
 
@@ -128,9 +130,10 @@
 -->
 
         <LinearLayout
-            android:layout_width="200dp"
+            android:layout_width="186dp"
             android:layout_height="match_parent"
             android:layout_gravity="center_vertical|center"
+            android:layout_weight="0.02"
             android:gravity="center_vertical"
             android:orientation="vertical" >
 
@@ -162,7 +165,7 @@
             <Button
                 android:id="@+id/Preview"
                 android:layout_width="180dp"
-                android:layout_height="50dp"
+                android:layout_height="63dp"
                 android:layout_gravity="center"
                 android:background="@drawable/bouton_preview" />
 
