@@ -40,17 +40,20 @@ public class FullscreenActivity extends Activity {
 	public int refresh_status = 5;
 	private static String URL = "http://10.5.5.9/bacpac/sd";
 	String libFov[] = {"W","M","N"};
-	String libPhotoRes[] = {"","","","5MP / M","7MP / W","12MP / W","7MP / M"};
+	String libPhotoRes[] = {"","","","5MP","7MP","12MP","7MP"};
+	String libPhotoAngle[] = {"","","","M","W","W","M"};
 	String libBurstRate[] = {"3/1 SEC","5/1 SEC","10/1 SEC","10/2 SEC","30/1 SEC","30/2 SEC","30/3 SEC"};
 	String libVidres[] = {"WVGA","720","960","1080","1440","2.7K","4K","2.7K Cin","4K Cin"};
 	String libFps[]={"12","15","24","25","30","48","50","60","100","120","240" };
+	public String camname,version;
+	public int Model=0,lastmode=0,cammode=0;
 	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_fullscreen);
-	    final Button button_Record = (Button) findViewById(R.id.Record);
-	    final Button button_Mode = (Button) findViewById(R.id.Mode);
-	    final Button button_Preview = (Button) findViewById(R.id.Preview);
+	    Button button_Record = (Button) findViewById(R.id.Record);
+	    Button button_Mode = (Button) findViewById(R.id.Mode);
+	    Button button_Preview = (Button) findViewById(R.id.Preview);
 		TextView Status1 = (TextView) findViewById(R.id.status_ligne1);
 		TextView Status4 = (TextView) findViewById(R.id.status_ligne4);
 		TextView Status2 = (TextView) findViewById(R.id.status_ligne2);
@@ -160,28 +163,125 @@ public class FullscreenActivity extends Activity {
 		           			TextView Status4 = (TextView) findViewById(R.id.status_ligne4);
 		           			TextView Status2 = (TextView) findViewById(R.id.status_ligne2);
 		           			TextView Status3 = (TextView) findViewById(R.id.status_ligne3);
+		           		    Button button_Record = (Button) findViewById(R.id.Record);
+		           		    Button button_Mode = (Button) findViewById(R.id.Mode);
+		           		    Button button_Preview = (Button) findViewById(R.id.Preview);
 		           			Typeface tf = Typeface.createFromAsset(getAssets(),"fonts/ladyic.ttf");
 		           		    Status3.setTypeface(tf);
 		           		    Status3.setTextSize(68);
 	        				ImageView BatteryLeft = (ImageView) findViewById(R.id.image_battery);
 	        				ImageView wifistatus = (ImageView) findViewById(R.id.Image_wifi);
-
+	        				ImageView image_mode = (ImageView) findViewById(R.id.image_mode);
 		        		    System.out.println("Refresh status..." );
 		        		    try {
 	            				BackPack bacpack = helper.getBackPackInfo(); //bacpac/cv
 	            				BacPacStatus bacpacStatus = helper.getBacpacStatus();
 	            				CamFields camFields;
 	            				Resources res = getResources();
-	            				Drawable drawPower = res.getDrawable(R.drawable.iconepower4);
+
 	            				Drawable drawwifi = res.getDrawable(R.drawable.iconwifi0);
-	            				BatteryLeft.setImageDrawable(drawPower);
+	            				//BatteryLeft.setImageDrawable(drawPower);
 	            				int wifiLevel = bacpacStatus.getRSSI();
 	            				if (bacpacStatus.isCameraPowerOn()) {
-	            					
-	            				} else {
-			            			// affiche la batterie grise et vide le %
+	            					System.out.println("isCameraPowerOn(Yes)" );
+	            					try {
+	         							camFields=helper.getCameraInfo();
+										Model = camFields.getModel();
+										version = camFields.getVersion();
+										camname = camFields.getCamname();
+									} catch (Exception e2) { e2.printStackTrace(); 	}
+									camFields = helper.getCameraSettings();
+									int getBattery = camFields.getBattery();
+		            				camFields = helper.getCameraSettingsExtended();
+		            				int BatteryOn = camFields.getBattery();
+		            				int currentMode = camFields.getMode();
+		            				int currentAngle = camFields.getFieldOfView();
+		            				int currentPhotoRes = camFields.getPhotoResolution();
+		            				int currentBurstRate = camFields.getBurstRate();
+		            				int currentVideoRes =camFields.getVidres();
+		            				int currentfps = camFields.getFramesPerSecond();
+		            				int currentTimelapse = camFields.getTimeLapse();
+		            				long currentNbrePhotos = 0; String ScurrentNbrePhotos;
+		            				currentNbrePhotos = camFields.getPhotosOncard();
+		            				if (currentNbrePhotos<10) { ScurrentNbrePhotos="0"+String.valueOf(currentNbrePhotos); }
+		            				else { ScurrentNbrePhotos=String.valueOf(currentNbrePhotos); }
+		            				long currentNbreVideos = 0; String ScurrentNbreVideos;
+		            				currentNbreVideos = camFields.getVideoOncard();
+		            				if (currentNbreVideos<10) { ScurrentNbreVideos="0"+String.valueOf(currentNbreVideos); }
+		            				else { ScurrentNbreVideos=String.valueOf(currentNbreVideos); }
+		            				long FreePhotos = camFields.getPhotosAvailable();
+		            				long FreeVideos = camFields.getVideoAvailable();
+		            				long hours = FreeVideos / 60; //since both are ints, you get an int
+		            				long minutes = FreeVideos % 60;
+		            				String FreeTime = String.format("%d H %02d", hours, minutes);
+		            				long Recording = camFields.getPlaybackPos();
+		            				String libRecording = getTwoDecimalsValue(Recording/3600) + ":" + getTwoDecimalsValue(Recording/60) + ":" +getTwoDecimalsValue(Recording%60);
+		            				String libTimelapse;
+		            				if (currentTimelapse == 0) { libTimelapse="0.5"; } else { libTimelapse = String.valueOf(currentTimelapse); }
+		            				Drawable drawPower = res.getDrawable(R.drawable.iconepower4);
+		            				if (isBetween(getBattery, 75, 100))  drawPower = res.getDrawable(R.drawable.iconepower3); 
+		            				if (isBetween(getBattery, 50, 74))   drawPower = res.getDrawable(R.drawable.iconepower2); 
+		            				if (isBetween(getBattery, 25, 49))   drawPower = res.getDrawable(R.drawable.iconepower1); 
+		            				if (isBetween(getBattery, 10, 24))   drawPower = res.getDrawable(R.drawable.iconepower0); 
+		            				if (isBetween(getBattery, 0, 9))     drawPower = res.getDrawable(R.drawable.iconepower00);
+		            				if (BatteryOn==4) drawPower = res.getDrawable(R.drawable.iconepowerac);
+		            		//		battery_value.setText(getBattery+"%");
 		            				BatteryLeft.setImageDrawable(drawPower);
+		            				// affiche le bouton bleu
+		            		//		button_power.setBackgroundResource(R.drawable.iconpoweron);
+			            			// bouton preview est OFF
+			            		//	toggle_Preview .setBackgroundResource(R.drawable.icontools_off);
+		            				button_Preview.setClickable(true);
+			            			// bouton tools est ON
+			            			button_Record.setBackgroundResource(R.drawable.iconrecord);
+			            			button_Record.setClickable(true);
+			            			// bouton mode est ON		            			
+			            			lastmode=currentMode;
+			            			switch (currentMode) { 
+			            				case 0 :  	image_mode.setBackgroundResource(R.drawable.mode1);
+			            							if (Recording==0) { Status2.setText(libVidres[currentVideoRes]+" / "+libFps[currentfps]); Status1.setText(libFov[currentAngle]); 
+			            								Status3.setText(ScurrentNbreVideos); }
+			            							else { Status2.setText(libVidres[currentVideoRes]+" / "+libFps[currentfps]+" / "+libFov[currentAngle]); Status2.setText("RECORDING..."); 
+			            								Status3.setText(libRecording); }
+			            							Status4.setText(FreeTime);
+			            							break;  
+			            				case 1 :  	image_mode.setBackgroundResource(R.drawable.mode2);
+			            							Status1.setText(libPhotoAngle[currentPhotoRes]);
+			            							Status2.setText(libPhotoRes[currentPhotoRes]);
+			            							Status3.setText(ScurrentNbrePhotos);
+			            							Status4.setText(String.valueOf(FreePhotos));
+			            							break;  
+			            				case 2 :  	image_mode.setBackgroundResource(R.drawable.mode3); 
+			            							Status1.setText(libPhotoAngle[currentPhotoRes]);
+			            							Status2.setText(libPhotoRes[currentPhotoRes]+"  -  "+libBurstRate[currentBurstRate]); 
+			            							Status3.setText(ScurrentNbrePhotos);
+			            							Status4.setText(String.valueOf(FreePhotos));
+			            							break;  
+			            				case 3 :  	image_mode.setBackgroundResource(R.drawable.mode4); 
+			            							Status1.setText(libPhotoAngle[currentPhotoRes]);			
+			            							Status2.setText(libPhotoRes[currentPhotoRes]+"  -  "+libTimelapse+" SEC");
+			            							Status3.setText(String.valueOf(currentNbrePhotos));
+			            							Status4.setText(String.valueOf(FreePhotos));
+			            							break;  
+			            			}
+			            			if (currentNbreVideos==65535) { Status3.setText(""); }
+			            			BatteryLeft.setVisibility(View.VISIBLE);
+			            			wifistatus.setVisibility(View.VISIBLE);
+			            			Status1.setVisibility(View.VISIBLE);
+			            			Status2.setVisibility(View.VISIBLE);
+			            			Status3.setVisibility(View.VISIBLE);
+			            			Status4.setVisibility(View.VISIBLE);
+			            			image_mode.setVisibility(View.VISIBLE);
 
+	            				} else {
+	            					wifistatus.setVisibility(View.INVISIBLE);
+	            					BatteryLeft.setVisibility(View.INVISIBLE);
+			            			Status1.setVisibility(View.INVISIBLE);
+			            			Status2.setVisibility(View.INVISIBLE);
+			            			Status3.setVisibility(View.INVISIBLE);
+			            			Status4.setVisibility(View.INVISIBLE);
+			            			image_mode.setVisibility(View.INVISIBLE);
+	            					System.out.println("isCameraPowerOn(No)" );
 	            				}
 		            			switch (wifiLevel) {
 	            				case 0 : drawwifi = res.getDrawable(R.drawable.iconwifi0); break;
