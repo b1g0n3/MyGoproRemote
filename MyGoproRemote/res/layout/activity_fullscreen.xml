@@ -13,10 +13,10 @@
         android:layout_height="fill_parent" >
 
         <LinearLayout
-            android:layout_width="200dp"
+            android:layout_width="196dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical|center"
-            android:layout_weight="0.67"
+            android:layout_marginLeft="18dp"
             android:gravity="center_vertical"
             android:orientation="vertical" >
 
@@ -114,45 +114,72 @@
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="186dp"
+            android:layout_width="30dp"
             android:layout_height="match_parent"
-            android:layout_gravity="center_vertical|center"
-            android:layout_weight="0.02"
+            android:orientation="vertical"
+            android:paddingLeft="1dp"
+            android:paddingTop="20dp" >
+
+              <ImageView
+                android:id="@+id/red"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center"
+                android:src="@drawable/led_red_off" />
+<!--  
+            <View
+                android:id="@+id/red1"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="5dp" />
+
+            <ImageView
+                android:id="@+id/blue"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="5dp"
+                android:paddingTop="1dp"
+                android:src="@drawable/led_blue_off" />
+-->
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="right|center"
             android:gravity="center_vertical"
             android:orientation="vertical" >
 
             <Button
                 android:id="@+id/Record"
-                android:layout_width="180dp"
-                android:layout_height="80dp"
-                android:layout_gravity="center_horizontal"
+                android:layout_width="160dp"
+                android:layout_height="70dp"
+                android:layout_gravity="center"
                 android:background="@drawable/bouton_record"
                 android:clickable="false"
                 android:focusable="false" />
 
             <Button
                 android:id="@+id/Mode"
-                android:layout_width="180dp"
-                android:layout_height="80dp"
-                android:layout_gravity="center_horizontal"
+                android:layout_width="160dp"
+                android:layout_height="70dp"
+                android:layout_gravity="center"
                 android:background="@drawable/bouton_mode"
                 android:focusable="false" />
 
             <ImageView
                 android:id="@+id/ImageView01"
-                android:layout_width="180dp"
+                android:layout_width="160dp"
                 android:layout_height="4dp"
                 android:layout_gravity="center"
-                android:layout_marginBottom="4dp"
-                android:layout_marginLeft="4dp"
-                android:layout_marginRight="4dp"
-                android:layout_marginTop="4dp"
                 android:background="#00ff00" />
 
             <Button
                 android:id="@+id/Preview"
-                android:layout_width="180dp"
-                android:layout_height="63dp"
+                android:layout_width="160dp"
+                android:layout_height="60dp"
                 android:layout_gravity="center"
                 android:background="@drawable/bouton_preview"
                 android:clickable="false"

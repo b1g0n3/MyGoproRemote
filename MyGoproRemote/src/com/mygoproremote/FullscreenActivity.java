@@ -18,11 +18,13 @@ import org.gopro.core.model.BacPacStatus;
 import org.gopro.core.model.BackPack;
 import org.gopro.core.model.CamFields;
 import org.gopro.main.GoProApi;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Typeface;
+import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -61,6 +63,12 @@ public class FullscreenActivity extends Activity {
 		Typeface tf = Typeface.createFromAsset(getAssets(),"fonts/ladyic.ttf");
 	    tv.setTypeface(tf);
 	    tv.setTextSize(68);
+	//	ImageView red_poweron = (ImageView)findViewById(R.id.red);
+	//	red_poweron.setBackgroundResource(R.drawable.led_red_poweron);
+	//	final AnimationDrawable poweronAnimation = (AnimationDrawable) red_poweron.getBackground();
+	//	ImageView red_poweroff = (ImageView)findViewById(R.id.red);
+	//	red_poweroff.setImageResource(R.drawable.led_red_poweroff);
+	//	final AnimationDrawable poweroffAnimation = (AnimationDrawable) red_poweroff.getDrawable();
 	    checkGopro();
 	    GoproPassword = getPassword();
 	    if (GoproPassword!="") {
@@ -86,9 +94,10 @@ public class FullscreenActivity extends Activity {
 						BacPacStatus bacpacStatus = helper.getBacpacStatus();
 						if (bacpacStatus.isCameraPowerOn()) {
 									
-							// la camera est on, donc on change l'eteind
-							
+							// la camera est on, donc on l'eteind
+						//	poweroffAnimation.start();
 							gopro.getHelper().turnOffCamera();
+							System.out.println("turnOff");
 						}
 					} catch (Exception e) {
 							// TODO Auto-generated catch block
@@ -119,6 +128,8 @@ public class FullscreenActivity extends Activity {
 						} else {
 								try {
 									gopro.getHelper().turnOnCamera();
+						//			poweronAnimation.start();
+									System.out.println("turnOn");
 								} catch (Exception e) {
 									// TODO Auto-generated catch block
 									e.printStackTrace();
@@ -172,7 +183,11 @@ public class FullscreenActivity extends Activity {
 	        				ImageView BatteryLeft = (ImageView) findViewById(R.id.image_battery);
 	        				ImageView wifistatus = (ImageView) findViewById(R.id.Image_wifi);
 	        				ImageView image_mode = (ImageView) findViewById(R.id.image_mode);
-		        		    System.out.println("Refresh status..." );
+	        				ImageView led_red = (ImageView) findViewById(R.id.red);
+	        			//	ImageView red_record = (ImageView)findViewById(R.id.red);
+	        			//	red_record.setImageResource(R.drawable.led_red_record);
+	        			//	AnimationDrawable recordAnimation = (AnimationDrawable) red_record.getBackground();
+		        		 //   System.out.println("Refresh status..." );
 		        		    try {
 	            				BackPack bacpack = helper.getBackPackInfo(); //bacpac/cv
 	            				BacPacStatus bacpacStatus = helper.getBacpacStatus();
@@ -183,7 +198,7 @@ public class FullscreenActivity extends Activity {
 	            				//BatteryLeft.setImageDrawable(drawPower);
 	            				int wifiLevel = bacpacStatus.getRSSI();
 	            				if (bacpacStatus.isCameraPowerOn()) {
-	            					System.out.println("isCameraPowerOn(Yes)" );
+	            			//		System.out.println("isCameraPowerOn(Yes)" );
 	            					try {
 	         							camFields=helper.getCameraInfo();
 										Model = camFields.getModel();
@@ -239,9 +254,14 @@ public class FullscreenActivity extends Activity {
 			            			lastmode=currentMode;
 			            			switch (currentMode) { 
 			            				case 0 :  	image_mode.setBackgroundResource(R.drawable.mode1);
-			            							if (Recording==0) { Status2.setText(libVidres[currentVideoRes]+" / "+libFps[currentfps]); Status1.setText(libFov[currentAngle]); 
+			            							if (Recording==0) { Status2.setText(libVidres[currentVideoRes]+" / "+libFps[currentfps]); 
+			            								Status1.setText(libFov[currentAngle]);
+			            								Drawable drawPower = res.getDrawable(R.drawable.iconepower4);
+			            							//	if (recordAnimation.isRunning()) { recordAnimation.stop(); }
 			            								Status3.setText(ScurrentNbreVideos); }
-			            							else { Status2.setText(libVidres[currentVideoRes]+" / "+libFps[currentfps]+" / "+libFov[currentAngle]); Status2.setText("RECORDING..."); 
+			            							else { Status2.setText(libVidres[currentVideoRes]+" / "+libFps[currentfps]+" / "+libFov[currentAngle]); 
+			            								Status2.setText("RECORDING...");
+			            							//	if (!recordAnimation.isRunning()) { recordAnimation.start(); }
 			            								Status3.setText(libRecording); }
 			            							Status4.setText(FreeTime);
 			            							break;  
@@ -281,7 +301,7 @@ public class FullscreenActivity extends Activity {
 			            			Status3.setVisibility(View.INVISIBLE);
 			            			Status4.setVisibility(View.INVISIBLE);
 			            			image_mode.setVisibility(View.INVISIBLE);
-	            					System.out.println("isCameraPowerOn(No)" );
+	            			//		System.out.println("isCameraPowerOn(No)" );
 	            				}
 		            			switch (wifiLevel) {
 	            				case 0 : drawwifi = res.getDrawable(R.drawable.iconwifi0); break;
