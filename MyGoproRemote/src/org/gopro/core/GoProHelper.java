@@ -280,38 +280,11 @@ public class GoProHelper {
 		}
 	}
 
-//	byte[] toBytes(int i)
-//	{
-//	  byte[] result = new byte[4];
-
-//	  result[0] = (byte) (i >> 24);
-//	  result[1] = (byte) (i >> 16);
-//	  result[2] = (byte) (i >> 8);
-//	  result[3] = (byte) (i /*>> 0*/);
-
-//	  return result;
-//	}
-	
-//	public byte[] intToBytes( final int i ) {
-//	    ByteBuffer bb = ByteBuffer.allocate(4); 
-//	    bb.putInt(i); 
-//	    return bb.array();
-//	}
-	
-//	public static boolean[] byteArray2BitArray(byte[] bytes) {
-//	    boolean[] bits = new boolean[bytes.length * 8];
-//	    for (int i = 0; i < bytes.length * 8; i++) {
-//	      if ((bytes[i / 8] & (1 << (7 - (i % 8)))) > 0)
-//	        bits[i] = true;
-//	    }
-//		System.out.println("[0]"+bits[0]+"[1]"+bits[1]+"[2]"+bits[2]+"[3]"+bits[3]+"[4]"+bits[4]+"[5]"+bits[5]+"[6]"+bits[6]+"[7]"+bits[7]+"[8]"+bits[8]);
-//	    return bits;
-//	}
 
 	
 	public CamFields getCameraSettingsExtended(GoProProtocolParser paramGoProProtocolParser) {
 		CamFields localCamFields = new CamFields();
-		int i;
+		int i,j;
 		if (paramGoProProtocolParser.extractResultCode() != GoProProtocolParser.RESULT_IS_OK)
 			return null;
 //		i = paramGoProProtocolParser.extractUnsignedByte();
@@ -324,9 +297,11 @@ public class GoProHelper {
 		localCamFields.setFieldOfView(paramGoProProtocolParser.extractUnsignedByte());
 		localCamFields.setPhotoResolution(paramGoProProtocolParser.extractUnsignedByte());
 		localCamFields.setVidres(paramGoProProtocolParser.extractUnsignedByte());
-		localCamFields.setAudioinput(paramGoProProtocolParser.extractUnsignedByte());
+		localCamFields.setAudioinput(paramGoProProtocolParser.extractUnsignedByte());                                      
 		localCamFields.setPlaymode(paramGoProProtocolParser.extractShort());
-		localCamFields.setPlaybackPos(paramGoProProtocolParser.extractShort());
+		localCamFields.setPlaybackMin(paramGoProProtocolParser.extractByte());
+		localCamFields.setPlaybackSec(paramGoProProtocolParser.extractByte());
+//		localCamFields.setPlaybackPos(paramGoProProtocolParser.extractShort());		
 		i = paramGoProProtocolParser.extractByte();
 		i = paramGoProProtocolParser.extractByte();
 		i = paramGoProProtocolParser.extractByte();
@@ -340,26 +315,40 @@ public class GoProHelper {
 		localCamFields.setVideoAvailable(paramGoProProtocolParser.extractShort());
 		localCamFields.setVideoOncard(paramGoProProtocolParser.extractShort());
 		localCamFields.setShutter(paramGoProProtocolParser.extractUnsignedByte());
+		localCamFields.setProtuneEnabled(paramGoProProtocolParser.extractUnsignedByte());
 		i = paramGoProProtocolParser.extractUnsignedByte();
 		i = paramGoProProtocolParser.extractUnsignedByte();
+		i = paramGoProProtocolParser.extractUnsignedByte();
+		localCamFields.setProtuneSetting(paramGoProProtocolParser.extractUnsignedByte());
 		localCamFields.setBurstRate(paramGoProProtocolParser.extractUnsignedByte());				
 		i = paramGoProProtocolParser.extractUnsignedByte();
+//		System.out.println("i1 :" + i);
 		i = paramGoProProtocolParser.extractUnsignedByte();
+//		System.out.println("i2 :" + i);
 		i = paramGoProProtocolParser.extractUnsignedByte();
+//		System.out.println("i3 :" + i);
 		i = paramGoProProtocolParser.extractUnsignedByte();
+//		System.out.println("i4 :" + i);
 		i = paramGoProProtocolParser.extractUnsignedByte();
+//		System.out.println("i5 :" + i);
 		i = paramGoProProtocolParser.extractUnsignedByte();
+//		System.out.println("i6 :" + i);
 		i = paramGoProProtocolParser.extractUnsignedByte();
+//		System.out.println("i7 :" + i);
 		i = paramGoProProtocolParser.extractUnsignedByte();
+//		System.out.println("i8 :" + i);
 		i = paramGoProProtocolParser.extractUnsignedByte();
+//		System.out.println("i9 :" + i);
 		i = paramGoProProtocolParser.extractUnsignedByte();
+//		System.out.println("i10 :" + i);
 		i = paramGoProProtocolParser.extractUnsignedByte();
+//		System.out.println("i11 :" + i);
 		i = paramGoProProtocolParser.extractUnsignedByte();
+//		System.out.println("i12 :" + i);
 		i = paramGoProProtocolParser.extractUnsignedByte();
+//		System.out.println("i13 :" + i);
 		i = paramGoProProtocolParser.extractUnsignedByte();
-		i = paramGoProProtocolParser.extractUnsignedByte();
-		i = paramGoProProtocolParser.extractUnsignedByte();
-		i = paramGoProProtocolParser.extractUnsignedByte();
+//		System.out.println("i14 :" + i);
 		localCamFields.setVidres(paramGoProProtocolParser.extractUnsignedByte());
 		localCamFields.setFramesPerSecond(paramGoProProtocolParser.extractUnsignedByte());
 		return localCamFields;

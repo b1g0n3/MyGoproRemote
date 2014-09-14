@@ -45,6 +45,8 @@ public class CamFields
         photoResolution = 0;
         protuneSetting = 0;
         previewValid = 0;
+        playbacksec = 0;
+        playbackmin = 0;
         mFieldOfView = 0;
         mHlsSegmentSize = -1;
         mBurstMode = -1;
@@ -70,7 +72,7 @@ public class CamFields
         updown = false;
         mLocateActive = false;
         mCameraBusy = false;
-        mProtuneEnabled = false;
+        mProtuneEnabled = -1;
         mPreviewActive = false;
     }
 
@@ -137,7 +139,7 @@ public class CamFields
         updown = false;
         mLocateActive = false;
         mCameraBusy = false;
-        mProtuneEnabled = false;
+        mProtuneEnabled = -1;
         mPreviewActive = false;
         ip = s;
         port = i;
@@ -358,6 +360,16 @@ public class CamFields
         return playbackpos;
     }
 
+    public int getPlaybackMin()
+    {
+        return playbackmin;
+    }
+
+    public int getPlaybackSec()
+    {
+        return playbacksec;
+    }
+    
     public String getPlaybackStart()
     {
         return playbackstart;
@@ -381,6 +393,11 @@ public class CamFields
     public int getProtocol()
     {
         return protocol;
+    }
+
+    public int getProtuneEnabled()
+    {
+        return mProtuneEnabled;
     }
 
     public int getProtuneSetting()
@@ -498,7 +515,7 @@ public class CamFields
         return mPreviewAvailable;
     }
 
-    public boolean isProtuneEnabled()
+    public int isProtuneEnabled()
     {
         return mProtuneEnabled;
     }
@@ -748,6 +765,16 @@ public class CamFields
         playbackpos = l;
     }
 
+    public void setPlaybackSec(int i)
+    {
+        playbacksec = i;
+    }
+
+    public void setPlaybackMin(int i)
+    {
+        playbackmin = i;
+    }
+    
     public void setPlaybackStart(String s)
     {
         playbackstart = s;
@@ -783,9 +810,9 @@ public class CamFields
         protocol = i;
     }
 
-    public void setProtuneEnabled(boolean flag)
+    public void setProtuneEnabled(short s)
     {
-        mProtuneEnabled = flag;
+        mProtuneEnabled = s;
     }
 
     public void setProtuneSetting(int i)
@@ -894,6 +921,8 @@ public class CamFields
     private boolean mBroadcasting;
     private int mBurstMode;
     private int mBurstRate;
+    private int playbacksec;
+    private int playbackmin;
     private boolean mCameraBusy;
     private int mContinuousShot;
     private int mExternalBatteryLevelPercent;
@@ -909,7 +938,7 @@ public class CamFields
     private int mPhotoInVideo;
     private boolean mPreviewActive;
     private boolean mPreviewAvailable;
-    private boolean mProtuneEnabled;
+    private int mProtuneEnabled;
     private HashMap mSettingsBag;
     private int mSlideshowSetting;
     private int mTimeLapseStyle;

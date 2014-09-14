@@ -36,6 +36,12 @@
             android:label="@string/title_activity_preview"
             android:theme="@style/AppTheme" >
         </activity>
+        <activity
+            android:name=".GoproNotFound"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_preview"
+            android:theme="@style/AppTheme" >
+        </activity>
     </application>
 
 </manifest>
