@@ -20,6 +20,8 @@ import org.gopro.core.model.CamFields;
 import org.gopro.main.GoProApi;
 
 import android.app.Activity;
+import android.app.ActivityManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -40,6 +42,8 @@ public class FullscreenActivity extends Activity {
 
 	public static String GoproPassword = "";
 	public int refresh_status = 2;
+	public int timeout = 2;
+	
 	private static String URL = "http://10.5.5.9/bacpac/sd";
 	String libFov[] = {"W","M","N"};
 	String libPhotoRes[] = {"","","","5MP","7MP","12MP","7MP"};
@@ -48,10 +52,10 @@ public class FullscreenActivity extends Activity {
 	String libVidres[] = {"WVGA","720","960","1080","1440","2.7K","4K","2.7K Cin","4K Cin"};
 	String libFps[]={"12","15","24","25","30","48","50","60","100","120","240" };
 	public String camname,version;
-	public int Model=0,lastmode=0,cammode=0,currentshutter=0;
+	public int Model=0,lastmode=0,cammode=0,currentshutter=0,busy_error=0;
 	Drawable ledred,ledblue,exposure,balence;
 	Handler mHandler;
-
+	Timer timer;
 	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -59,7 +63,6 @@ public class FullscreenActivity extends Activity {
 	    final Button button_Record = (Button) findViewById(R.id.Record);
 	    final Button button_Mode = (Button) findViewById(R.id.Mode);
 	    final Button button_Preview = (Button) findViewById(R.id.Preview);
-//		button_Record.setBackgroundResource(R.drawable.iconrecord);
     	button_Preview.setEnabled(false);
     	button_Preview.setClickable(false);
     	button_Preview.setFocusable(false);
@@ -69,9 +72,6 @@ public class FullscreenActivity extends Activity {
     	button_Mode.setEnabled(false);
     	button_Mode.setClickable(false);
     	button_Mode.setFocusable(false);
-	    TextView Status1 = (TextView) findViewById(R.id.status_ligne1);
-		TextView Status4 = (TextView) findViewById(R.id.status_ligne4);
-		TextView Status2 = (TextView) findViewById(R.id.status_ligne2);
 		TextView tv = (TextView) findViewById(R.id.status_ligne3);
 		Typeface tf = Typeface.createFromAsset(getAssets(),"fonts/ladyic.ttf");
 	    tv.setTypeface(tf);
@@ -86,13 +86,14 @@ public class FullscreenActivity extends Activity {
 	    	Resources res = getResources();
 	    	ledblue = res.getDrawable(R.drawable.led_blue_on);
 			led_blue.setImageDrawable(ledblue);
-		    final Timer timer = new Timer();
-	        TimerTask updateProfile = new CustomTimerTask(FullscreenActivity.this);
-	        timer.scheduleAtFixedRate(updateProfile, 0, refresh_status*1000);
+
 		    button_Preview.setOnClickListener(new View.OnClickListener() {
 	        	public void onClick(View view) {
 	        		System.out.println("Preview On");
-	        		startActivity(new Intent(FullscreenActivity.this, PreviewActivity.class));    
+	        		timer.cancel();
+	        		Intent i = new Intent(getApplicationContext(), PreviewActivity.class);
+	        		i.putExtra("busy_activite",1);
+	        		startActivity(i);
 	        	}
 			});
 
@@ -104,6 +105,9 @@ public class FullscreenActivity extends Activity {
 		        		try {
 			        		System.out.println("Record On");
 		        			gopro.getHelper().startRecord();
+		        	    	button_Preview.setEnabled(false);
+		        	    	button_Preview.setClickable(false);
+		        	    	button_Preview.setFocusable(false);
 						} catch (Exception e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -113,6 +117,9 @@ public class FullscreenActivity extends Activity {
 		        		try {
 			        		System.out.println("Record Off");
 		        			gopro.getHelper().stopRecord();
+		        	    	button_Preview.setEnabled(true);
+		        	    	button_Preview.setClickable(true);
+		        	    	button_Preview.setFocusable(true);
 						} catch (Exception e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -126,15 +133,13 @@ public class FullscreenActivity extends Activity {
 		    button_Mode.setOnLongClickListener(new View.OnLongClickListener() {			
 				@Override
 				public boolean onLongClick(View v) {
-					// TODO Auto-generated method stub
+					// TODO auto-generated method stub
 	    			GoProApi gopro = new GoProApi(GoproPassword);
 	    			GoProHelper helper = gopro.getHelper();
 					try {
 						BacPacStatus bacpacStatus = helper.getBacpacStatus();
 						if (bacpacStatus.isCameraPowerOn()) {
-									
 							// la camera est on, donc on l'eteind
-						//	poweroffAnimation.start();
 							gopro.getHelper().turnOffCamera();
 							System.out.println("Power Off");
 						}
@@ -154,15 +159,26 @@ public class FullscreenActivity extends Activity {
 					try {
 						BacPacStatus bacpacStatus = helper.getBacpacStatus();
 						if (bacpacStatus.isCameraPowerOn()) {
-								try {
+							
+							try {
 									System.out.println("Mode suivant");
 									// la camera est on, donc on change le Mode
-									gopro.getHelper().changeModeCamera();
-								} catch (Exception e) {
+									switch (lastmode) {
+									case 0 : gopro.getHelper().modePhoto(); 
+											break;
+									case 1 : gopro.getHelper().modeBurst();
+										break;
+									case 2 : gopro.getHelper().timelapse1();
+										break;
+									default: gopro.getHelper().modeCamera();
+										break;
+									}	
+									
+							} catch (Exception e) {
 									// TODO Auto-generated catch block
 									e.printStackTrace();
 					        		System.out.println("exception1");
-								}
+							}
 						} else {
 								try {
 									gopro.getHelper().turnOnCamera();
@@ -181,30 +197,42 @@ public class FullscreenActivity extends Activity {
 		    });
 	    }
 	}
-	 	
+	@Override
+    public void onResume()
+    {
+        super.onResume();
+	    timer = new Timer();
+        TimerTask updateProfile = new CustomTimerTask(FullscreenActivity.this);
+        timer.scheduleAtFixedRate(updateProfile, 0, refresh_status*1000);
+     //   System.out.println("Status...onResume");
+    }
 	
 	//
 	//  BOUCLE DE STATUS
 	//
 	//   
-	public class CustomTimerTask extends TimerTask {
+
+	class CustomTimerTask extends TimerTask {
 	   private Context context;
 	   private Handler mHandler = new Handler();
-	   // Write Custom Constructor to pass Context
 	   public CustomTimerTask(Context con) {
 	       this.context = con;
 	   }
+
+//	Runnable runnable = new Runnable() {
+
 	   @Override
 	   public void run() {
-	       new Thread(new Runnable() {
-	           @Override
-	           public void run() {
-	               mHandler.post(new Runnable() {
-	                   @Override
-	                   public void run() {
+       new Thread(new Runnable() {
+       @Override
+       public void run() {
+    	   mHandler.post(new Runnable() {
+	       @Override
+	       public void run() {
 		                   	//
 		                   	// Boucle de status
 		                   	//
+	                	 //   System.out.println(".");
 		       				GoProApi gopro = new GoProApi(GoproPassword);
 		           			GoProHelper helper = gopro.getHelper();
 		           			TextView Status1 = (TextView) findViewById(R.id.status_ligne1);
@@ -294,11 +322,9 @@ public class FullscreenActivity extends Activity {
 		            				if (isBetween(getBattery, 72, 100))  drawPower = res.getDrawable(R.drawable.iconepower3); 
 		            				if (isBetween(getBattery, 42, 71))   drawPower = res.getDrawable(R.drawable.iconepower2); 
 		            				if (isBetween(getBattery, 12, 41))   drawPower = res.getDrawable(R.drawable.iconepower1); 
-		            			//	if (isBetween(getBattery, 10, 24))   drawPower = res.getDrawable(R.drawable.iconepower0); 
 		            				if (isBetween(getBattery, 0, 11))     drawPower = res.getDrawable(R.drawable.iconepower00);
 		            				if (BatteryOn==4) drawPower = res.getDrawable(R.drawable.iconepowerac);
 		            				BatteryLeft.setImageDrawable(drawPower);
-		            			//	System.out.println("battery="+getBattery);
 			            			lastmode=currentMode;
 			            			switch (currentMode) { 
 			            				case 0 :  	image_mode.setBackgroundResource(R.drawable.mode1);
@@ -310,7 +336,12 @@ public class FullscreenActivity extends Activity {
 			            							if (currentshutter==0) { Status2.setText(libVidres[currentVideoRes]+" / "+libFps[currentfps]); 
 			            								ledred = res.getDrawable(R.drawable.led_red_off);
 			            								led_red.setImageDrawable(ledred);
-			            								Status3.setText(ScurrentNbreVideos); }
+			            								Status3.setText(ScurrentNbreVideos);
+			            								Status4.setText(FreeTime);
+			        	            			    	button_Preview.setEnabled(true);
+			        	            			    	button_Preview.setClickable(true);
+			        	            			    	button_Preview.setFocusable(true);
+			            								}
 			            							else { Status2.setText(libVidres[currentVideoRes]+" / "+libFps[currentfps]);
 			            								String libRecording;
 			            								if (RecordingMin<10) { libRecording="0"+RecordingMin+":"; } else { libRecording=RecordingMin+":"; }
@@ -318,7 +349,11 @@ public class FullscreenActivity extends Activity {
 			            								ledred = res.getDrawable(R.drawable.led_red_on);
 			            								led_red.setImageDrawable(ledred);
 			            								Status3.setText(libRecording);
-			            								Status4.setText(FreeTime); }
+			            								Status4.setText(FreeTime);
+			        	            			    	button_Preview.setEnabled(false);
+			        	            			    	button_Preview.setClickable(false);
+			        	            			    	button_Preview.setFocusable(false);
+			            								}
 			            							break;  
 			            				case 1 :  	image_mode.setBackgroundResource(R.drawable.mode2);
 			            							Status1.setText(libPhotoAngle[currentPhotoRes]);
@@ -350,12 +385,17 @@ public class FullscreenActivity extends Activity {
 			            			image_mode.setVisibility(View.VISIBLE);
 		            				ledblue = res.getDrawable(R.drawable.led_blue_on);
 									led_blue.setImageDrawable(ledblue);
-	            			    	button_Preview.setEnabled(true);
-	            			    	button_Preview.setClickable(true);
-	            			    	button_Preview.setFocusable(true);
 	            			    	button_Record.setEnabled(true);
 	            			    	button_Record.setClickable(true);
 	            			    	button_Record.setFocusable(true);
+	            			    	switch (wifiLevel) {
+		            				case 0 : drawwifi = res.getDrawable(R.drawable.iconwifi0); break;
+		            				case 1 : drawwifi = res.getDrawable(R.drawable.iconwifi1); break;
+		            				case 2 : drawwifi = res.getDrawable(R.drawable.iconwifi2); break;
+		            				case 3 : drawwifi = res.getDrawable(R.drawable.iconwifi3); break;
+		            				case 4 : drawwifi = res.getDrawable(R.drawable.iconwifi4); break;
+		            				}
+		            				wifistatus.setImageDrawable(drawwifi);
 	            				} else {
 	            					wifistatus.setVisibility(View.INVISIBLE);
 	            					BatteryLeft.setVisibility(View.INVISIBLE);
@@ -371,47 +411,46 @@ public class FullscreenActivity extends Activity {
 	            			    	button_Record.setClickable(false);
 	            			    	button_Record.setFocusable(false);
 	            				}
-		            			switch (wifiLevel) {
-	            				case 0 : drawwifi = res.getDrawable(R.drawable.iconwifi0); break;
-	            				case 1 : drawwifi = res.getDrawable(R.drawable.iconwifi1); break;
-	            				case 2 : drawwifi = res.getDrawable(R.drawable.iconwifi2); break;
-	            				case 3 : drawwifi = res.getDrawable(R.drawable.iconwifi3); break;
-	            				case 4 : drawwifi = res.getDrawable(R.drawable.iconwifi4); break;
-	            				}
-	            				wifistatus.setImageDrawable(drawwifi);
+		            			busy_error=0;
 
 		        		    } catch (Exception e) {
 								// TODO Auto-generated catch block
-	            				System.out.println("Erreur reading settings from Gopro...");
-	            				Status2.setText("GoPro not found");
-            					wifistatus.setVisibility(View.INVISIBLE);
-            					BatteryLeft.setVisibility(View.INVISIBLE);
-		            			Status1.setVisibility(View.INVISIBLE);
-		            			Status3.setVisibility(View.INVISIBLE);
-		            			Status4.setVisibility(View.INVISIBLE);
-		            			image_mode.setVisibility(View.INVISIBLE);
-	            				Status2.setVisibility(View.VISIBLE);
-            			    	button_Preview.setEnabled(false);
-            			    	button_Preview.setClickable(false);
-            			    	button_Preview.setFocusable(false);
-            			    	button_Record.setEnabled(false);
-            			    	button_Record.setClickable(false);
-            			    	button_Record.setFocusable(false);
-            			    	button_Mode.setEnabled(false);
-            			    	button_Mode.setClickable(false);
-            			    	button_Mode.setFocusable(false);
-	            				ledblue = res.getDrawable(R.drawable.led_blue_off);
-								led_blue.setImageDrawable(ledblue);
+		        		    	busy_error++;
+		        		    	if (busy_error==timeout)
+		        		    	{
+		            				System.out.println("Erreur reading settings from Gopro...");
+		            				Status2.setText("GoPro not found");
+	            					wifistatus.setVisibility(View.INVISIBLE);
+	            					BatteryLeft.setVisibility(View.INVISIBLE);
+			            			Status1.setVisibility(View.INVISIBLE);
+			            			Status3.setVisibility(View.INVISIBLE);
+			            			Status4.setVisibility(View.INVISIBLE);
+			            			image_mode.setVisibility(View.INVISIBLE);
+		            				Status2.setVisibility(View.VISIBLE);
+	            			    	button_Preview.setEnabled(false);
+	            			    	button_Preview.setClickable(false);
+	            			    	button_Preview.setFocusable(false);
+	            			    	button_Record.setEnabled(false);
+	            			    	button_Record.setClickable(false);
+	            			    	button_Record.setFocusable(false);
+	            			    	button_Mode.setEnabled(false);
+	            			    	button_Mode.setClickable(false);
+	            			    	button_Mode.setFocusable(false);
+		            				ledblue = res.getDrawable(R.drawable.led_blue_off);
+									led_blue.setImageDrawable(ledblue);
+		        		    	}
 								e.printStackTrace();
-								
 		        		    }
+		        		    
+		        		    
+		   //     		    handler.postDelayed(this, refresh_status*1000);
 	                   }
 	           			
 	               });
 	           }
 	       }).start();
 	   }
-	}
+	};
 
 //	@Override
 	protected void onPostCreate(Bundle savedInstanceState) {

@@ -102,7 +102,6 @@
                     android:layout_gravity="top"
                     android:layout_marginTop="1dp"
                     android:background="#999999"
-                    android:text="2 H 44"
                     android:textColor="#000000"
                     android:textSize="24sp"
                     android:textStyle="bold" />
@@ -114,8 +113,7 @@
                     android:layout_gravity="top"
                     android:layout_marginTop="2dp"
                     android:background="#999999"
-                    android:padding="2dp"
-                    android:src="@drawable/iconepower2" />
+                    android:padding="2dp" />
 
                 <ImageView
                     android:id="@+id/Image_wifi"
@@ -127,8 +125,7 @@
                     android:background="#999999"
                     android:baselineAlignBottom="false"
                     android:cropToPadding="false"
-                    android:padding="2dp"
-                    android:src="@drawable/iconwifi1" />
+                    android:padding="2dp" />
 
             </LinearLayout>
         </LinearLayout>
