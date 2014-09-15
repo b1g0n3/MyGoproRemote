@@ -15,18 +15,13 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.gopro.core.GoProHelper;
 import org.gopro.core.model.BacPacStatus;
-import org.gopro.core.model.BackPack;
 import org.gopro.core.model.CamFields;
 import org.gopro.main.GoProApi;
-
 import android.app.Activity;
-import android.app.ActivityManager;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Typeface;
-import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -100,7 +95,6 @@ public class FullscreenActivity extends Activity {
 		    button_Record.setOnClickListener(new View.OnClickListener() {
 	        	public void onClick(View view) {
 	    			GoProApi gopro = new GoProApi(GoproPassword);
-	    			GoProHelper helper = gopro.getHelper();
 	    			if (currentshutter==0) {
 		        		try {
 			        		System.out.println("Record On");
@@ -204,7 +198,6 @@ public class FullscreenActivity extends Activity {
 	    timer = new Timer();
         TimerTask updateProfile = new CustomTimerTask(FullscreenActivity.this);
         timer.scheduleAtFixedRate(updateProfile, 0, refresh_status*1000);
-     //   System.out.println("Status...onResume");
     }
 	
 	//
@@ -232,7 +225,6 @@ public class FullscreenActivity extends Activity {
 		                   	//
 		                   	// Boucle de status
 		                   	//
-	                	 //   System.out.println(".");
 		       				GoProApi gopro = new GoProApi(GoproPassword);
 		           			GoProHelper helper = gopro.getHelper();
 		           			TextView Status1 = (TextView) findViewById(R.id.status_ligne1);
@@ -262,7 +254,6 @@ public class FullscreenActivity extends Activity {
 	            			image_expo.setVisibility(View.INVISIBLE);
 	            			image_balence.setVisibility(View.INVISIBLE);
 		        		    try {
-	            				BackPack bacpack = helper.getBackPackInfo(); //bacpac/cv
 	            				BacPacStatus bacpacStatus = helper.getBacpacStatus();
 	            				CamFields camFields;
 	            				int wifiLevel = bacpacStatus.getRSSI();
@@ -280,8 +271,6 @@ public class FullscreenActivity extends Activity {
 		            				int currentMode = camFields.getMode();
 		            				int currentAngle = camFields.getFieldOfView();
 		            				int currentPhotoRes = camFields.getPhotoResolution();
-		            		//		int currentloopingMode = camFields.getLoopingMode();
-		            		//		if (currentloopingMode>0) { Status4.setBackgroundResource(R.drawable.boucle); }
 		            				int currentProtuneEnabled=camFields.getProtuneEnabled();
 		            				String libProtune;
 		            				if (currentProtuneEnabled==6) libProtune=" Pt"; else libProtune=" ";
@@ -313,7 +302,6 @@ public class FullscreenActivity extends Activity {
 		            				} else { hours = 0; minutes = 0; }	
 		            				String FreeTime = String.format("%d H %02d", hours, minutes);
 		            				currentshutter = camFields.getShutter();
-		            				long Recording = camFields.getPlaybackPos();
 		            				int RecordingSec = camFields.getPlaybackSec();
 		            				int RecordingMin = camFields.getPlaybackMin();
 		            				String libTimelapse;
@@ -441,9 +429,6 @@ public class FullscreenActivity extends Activity {
 		        		    	}
 								e.printStackTrace();
 		        		    }
-		        		    
-		        		    
-		   //     		    handler.postDelayed(this, refresh_status*1000);
 	                   }
 	           			
 	               });
@@ -519,8 +504,6 @@ public class FullscreenActivity extends Activity {
 		} else { 
 			System.out.println("Check gopro : not found");
 			startActivity(new Intent(FullscreenActivity.this, GoproNotFound.class));
-
 		}
     }
-    
 }
