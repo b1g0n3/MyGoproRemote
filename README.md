@@ -23,8 +23,8 @@ With this version, you can't make change in settings. I will probably add this i
 
 Requirements:
 
-    Snow2 running the latest firmware (or Oakley Airwave 1.5 probably)
-    Gopro Hero 3 with wi-fi on, so normaly Silver, White and of course Black edition
+  Snow2 running the latest firmware (or Oakley Airwave 1.5 probably)
+  Gopro Hero 3 with wi-fi on, so normaly Silver, White and of course Black edition
 
 I just have tested with my Snow2 smith Optics goggles and my Gopro Hero 3 Black Edition.
 
@@ -32,3 +32,5 @@ The refresh of gopro's status is made every 2s so be careful of your battery lif
 DON'T LET THE APP WORKING WHILE YOU ARE SKINNG...FOR YOUR SAFETY AND YOUR BATTERY... 
 
 You can send me comment and feedback here or by mail : longin.francois@gmail.com
+
+I used partial unfinished "GoproJavaAPI" from Adriano Gonella for my project.
