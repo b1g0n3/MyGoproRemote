@@ -3,7 +3,7 @@
     android:id="@+id/LinearLayout1"
     android:layout_width="428dp"
     android:layout_height="240dp"
-    android:background="@drawable/background1"
+    android:background="@drawable/background2"
     android:gravity="center"
     android:orientation="vertical"
     tools:context="com.example.mygoproremote.FullscreenActivity" >
@@ -152,6 +152,17 @@
                 android:layout_gravity="center"
                 android:paddingLeft="5dp"
                 android:src="@drawable/led_red_off" />
+
+            <TextView
+                android:id="@+id/textView1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="150dp"
+                android:text="1.0a"
+                android:textColor="#ffffff"
+                android:textSize="10sp"
+                android:textStyle="bold" />
             
         </LinearLayout>
 

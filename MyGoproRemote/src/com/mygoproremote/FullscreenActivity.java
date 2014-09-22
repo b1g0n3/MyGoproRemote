@@ -35,16 +35,16 @@ import android.widget.Toast;
 
 public class FullscreenActivity extends Activity {
 
-	public static String GoproPassword = "";
+	static String GoproPassword = "";
 	public int refresh_status = 2;
 	public int timeout = 2;
 	
 	private static String URL = "http://10.5.5.9/bacpac/sd";
 	String libFov[] = {"W","M","N"};
-	String libPhotoRes[] = {"","","","5MP","7MP","12MP","7MP"};
-	String libPhotoAngle[] = {"","","","M","W","W","M"};
+	String libPhotoRes[] = {"11MP","8MP","5MP","5MP","7MP","12MP","7MP"};
+	String libPhotoAngle[] = {"W","M","W","M","W","W","M"};
 	String libBurstRate[] = {"3/1 SEC","5/1 SEC","10/1 SEC","10/2 SEC","30/1 SEC","30/2 SEC","30/3 SEC"};
-	String libVidres[] = {"WVGA","720","960","1080","1440","2.7K","4K","2.7K Cin","4K Cin"};
+	String libVidres[] = {"WVGA","720","960","1080","1440","2.7K","4K","2.7K Cin","4K Cin","1080Super","720Super"};
 	String libFps[]={"12","15","24","25","30","48","50","60","100","120","240" };
 	public String camname,version;
 	public int Model=0,lastmode=0,cammode=0,currentshutter=0,busy_error=0;
