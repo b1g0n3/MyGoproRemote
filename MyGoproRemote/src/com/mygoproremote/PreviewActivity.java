@@ -29,13 +29,18 @@ import android.widget.VideoView;
 public class PreviewActivity extends Activity {
 	VideoView videoview;
 	private static String URL = "http://10.5.5.9/bacpac/sd";
-	//public static String GoproPassword = "";
-	public int currentshutter=0;
+	public String GoproPassword; 
+	public int currentshutter=0,actual_mode=0;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_preview);
-		GoproPassword = getPassword();
+        final GlobalClass globalVariable = (GlobalClass) getApplicationContext();
+        // Get name and email from global/application context
+        GoproPassword  = globalVariable.getpassword();
+        actual_mode = globalVariable.getMode();
+		
 		PlayVideo();
 	};
 	
@@ -46,28 +51,40 @@ public class PreviewActivity extends Activity {
 	        case KeyEvent.KEYCODE_DPAD_CENTER :
 	        {
 	        	GoProApi gopro = new GoProApi(GoproPassword);
-    			if (currentshutter==0) {
+	        	if (actual_mode==0) {
+	        	
+	    			if (currentshutter==0) {
+		        		try {
+			        		System.out.println("Cam Record On");
+		        			gopro.getHelper().startRecord();
+		        			currentshutter=1;
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+							System.out.println("Error in /Cam Record On/");
+						}
+	    			} else {
+		        		try {
+			        		System.out.println("Cam Record Off");
+		        			gopro.getHelper().stopRecord();
+		        			currentshutter=0;
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+							System.out.println("Error in /Cam Record Off/");
+						}
+	    			}
+	        	} else {
 	        		try {
-		        		System.out.println("Record On");
+		        		System.out.println("Photo Record On");
 	        			gopro.getHelper().startRecord();
-	        			currentshutter=1;
 					} catch (Exception e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
-						System.out.println("Error in /Record On/");
+						System.out.println("Error in /Photo Record On/");
 					}
-    			} else {
-	        		try {
-		        		System.out.println("Record Off");
-	        			gopro.getHelper().stopRecord();
-	        			currentshutter=0;
-					} catch (Exception e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-						System.out.println("Error in /Record Off/");
-					}
-    				
-    			}
+	        		
+	        	}
 	            return true;
 	        }
 	    }
@@ -110,28 +127,4 @@ public class PreviewActivity extends Activity {
 	       }   
 
 	 }
-	public String getPassword() {
-		String  localObject = "", localObject1 = "";
-		
-		try {
-	        HttpClient httpclient = new DefaultHttpClient();
-	        HttpResponse response = null;
-			response = httpclient.execute(new HttpGet(URL));
-			StatusLine statusLine = response.getStatusLine();
-			if(statusLine.getStatusCode() == HttpStatus.SC_OK){
-	            ByteArrayOutputStream out = new ByteArrayOutputStream();
-				response.getEntity().writeTo(out);
-				out.close();
-				localObject1 = out.toString();
-			}
-			localObject=localObject1.substring(2);
-		} catch (Exception e) {
-			e.printStackTrace();
-			Toast.makeText(this, "GoPro not found", Toast.LENGTH_LONG).show();
-			System.out.println("GoPro not found..." );
-			TextView Status2 = (TextView) findViewById(R.id.status_ligne2);
-			Status2.setText("GoPro not found");
-		}
-		return (String) localObject;
-	}
 }

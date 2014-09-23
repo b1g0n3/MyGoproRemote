@@ -58,9 +58,9 @@ public class FullscreenActivity extends Activity {
 	    final Button button_Record = (Button) findViewById(R.id.Record);
 	    final Button button_Mode = (Button) findViewById(R.id.Mode);
 	    final Button button_Preview = (Button) findViewById(R.id.Preview);
-    	button_Preview.setEnabled(false);
-    	button_Preview.setClickable(false);
-    	button_Preview.setFocusable(false);
+    //	button_Preview.setEnabled(false);
+    //	button_Preview.setClickable(false);
+    //	button_Preview.setFocusable(false);
     	button_Record.setEnabled(false);
     	button_Record.setClickable(false);
     	button_Record.setFocusable(false);
@@ -85,6 +85,12 @@ public class FullscreenActivity extends Activity {
 		    button_Preview.setOnClickListener(new View.OnClickListener() {
 	        	public void onClick(View view) {
 	        		System.out.println("Preview On");
+	        		final GlobalClass globalVariable = (GlobalClass) getApplicationContext();
+	                
+	                //Set name and email in global/application context
+	                globalVariable.setpassword(GoproPassword);
+	                globalVariable.setMode(lastmode);
+	                
 	        		timer.cancel();
 	        		Intent i = new Intent(getApplicationContext(), PreviewActivity.class);
 	        		i.putExtra("busy_activite",1);
@@ -99,9 +105,9 @@ public class FullscreenActivity extends Activity {
 		        		try {
 			        		System.out.println("Record On");
 		        			gopro.getHelper().startRecord();
-		        	    	button_Preview.setEnabled(false);
-		        	    	button_Preview.setClickable(false);
-		        	    	button_Preview.setFocusable(false);
+		        	    //	button_Preview.setEnabled(false);
+		        	    //	button_Preview.setClickable(false);
+		        	    //	button_Preview.setFocusable(false);
 						} catch (Exception e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -111,9 +117,9 @@ public class FullscreenActivity extends Activity {
 		        		try {
 			        		System.out.println("Record Off");
 		        			gopro.getHelper().stopRecord();
-		        	    	button_Preview.setEnabled(true);
-		        	    	button_Preview.setClickable(true);
-		        	    	button_Preview.setFocusable(true);
+		        	    //	button_Preview.setEnabled(true);
+		        	    //	button_Preview.setClickable(true);
+		        	    //	button_Preview.setFocusable(true);
 						} catch (Exception e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();

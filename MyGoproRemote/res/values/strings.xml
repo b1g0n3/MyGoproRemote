@@ -7,5 +7,8 @@
     <string name="title_activity_preview">Preview</string>
     <string name="titre_notfound">GOPRO NOT FOUND...</string>
     <string name="text_notfound">"Make sure your Gopro&apos;s Wi-Fi is turned on. In your GoPro&apos;s Wi-Fi menu, select GoPro App.\n\nIn your Hud&apos;s Wi-Fi settings, connect to your camera&apos;s network name. Relaunch your MyGoproRemote app."</string>
-    
+    <string name="title_activity_global_class">GlobalClass</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+
 </resources>
