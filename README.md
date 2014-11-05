@@ -34,3 +34,9 @@ DON'T LET THE APP WORKING WHILE YOU ARE SKINNG...FOR YOUR SAFETY AND YOUR BATTER
 You can send me comment and feedback here or by mail : longin.francois@gmail.com
 
 I used partial unfinished "GoproJavaAPI" from Adriano Gonella for my project.
+
+Donate
+======
+
+If you want to donate, feel free
+https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=longin%2efrancois%40gmail%2ecom&lc=US&item_name=MyGoproRemote&no_note=0&currency_code=EUR&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHostedGuest
