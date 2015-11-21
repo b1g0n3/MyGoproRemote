@@ -36,3 +36,4 @@ You can send me comment and feedback here or by mail : longin.francois@gmail.com
 I used partial unfinished "GoproJavaAPI" from Adriano Gonella for my project.
 
 
+GOPRO, HERO, the GOPRO logo, and the GoPro Be a Hero logo are trademarks or registered trademarks of GoPro, Inc.
